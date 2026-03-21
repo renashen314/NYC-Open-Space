@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>NYC Park Properties</title>
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.2.0/mapbox-gl.css" rel="stylesheet" />
+    <link href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="container">
+      <aside id="sidebar" aria-label="Map controls and park information">
+        <div id="sidebar-header">
+          <h1>NYC Parks</h1>
+          <p>Explore public parks and basketball courts across New York City.</p>
+        </div>
+
+        <section id="info-panel" aria-live="polite">
+          <div id="pd">
+            <p class="placeholder">Click on a park to see details.</p>
+          </div>
+        </section>
+
+        <section id="controls">
+          <h2>Layers</h2>
+          <label class="toggle-row" for="toggle-basketball">
+            <span class="toggle-label">
+              <span class="btn-dot" style="background: orange;"></span>
+              Basketball Courts
+            </span>
+            <span class="switch">
+              <input type="checkbox" id="toggle-basketball" role="switch" />
+              <span class="slider"></span>
+            </span>
+          </label>
+          <label class="toggle-row" for="toggle-boroughs">
+            <span class="toggle-label">
+              <span class="btn-dot" style="background: steelblue;"></span>
+              Borough Boundaries
+            </span>
+            <span class="switch">
+              <input type="checkbox" id="toggle-boroughs" role="switch" />
+              <span class="slider"></span>
+            </span>
+          </label>
+        </section>
+
+        <button id="reset" aria-label="Reset map to default view">Reset View</button>
+      </aside>
+
+      <div id="map" role="application" aria-label="NYC parks map"></div>
+      <div class="map-overlay" id="legend" aria-label="Map legend"></div>
+    </div>
+
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.2.0/mapbox-gl.js"></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

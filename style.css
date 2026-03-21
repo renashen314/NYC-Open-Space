@@ -1,0 +1,290 @@
+/* ── Reset & base ───────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-size: 15px;
+  color: #1a1a2e;
+}
+
+/* ── Layout ─────────────────────────────────────────────────── */
+#container {
+  display: flex;
+  height: 100%;
+}
+
+#map {
+  flex-grow: 1;
+  height: 100%;
+}
+
+.mapboxgl-popup {
+  max-width: 220px;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────────── */
+#sidebar {
+  width: 25%;
+  flex-shrink: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 16px;
+  background: #f8f9fb;
+  border-right: 1px solid #e2e6ea;
+  overflow-y: auto;
+}
+
+/* ── Header ─────────────────────────────────────────────────── */
+#sidebar-header h1 {
+  margin: 0 0 6px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: #0d1b2a;
+}
+
+#sidebar-header p {
+  margin: 0;
+  font-size: 0.82rem;
+  color: #5a6475;
+  line-height: 1.5;
+}
+
+/* ── Info panel ──────────────────────────────────────────────── */
+#info-panel {
+  flex: 1;
+  min-height: 0;
+}
+
+#pd {
+  background: #fff;
+  border: 1px solid #e2e6ea;
+  border-radius: 10px;
+  padding: 14px 16px;
+  min-height: 100px;
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+#pd .placeholder {
+  margin: 0;
+  color: #9aa3af;
+  font-style: italic;
+  text-align: center;
+  padding-top: 18px;
+}
+
+#pd h3 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #0d1b2a;
+}
+
+#pd p {
+  margin: 4px 0;
+  color: #3d4a5c;
+}
+
+#pd strong {
+  color: #0d1b2a;
+}
+
+/* ── Layer controls ──────────────────────────────────────────── */
+#controls h2 {
+  margin: 0 0 10px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #9aa3af;
+}
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 12px;
+  margin-bottom: 8px;
+  background: #fff;
+  border: 1px solid #e2e6ea;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.toggle-row:hover {
+  background: #eef1f5;
+}
+
+.toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #3d4a5c;
+  pointer-events: none;
+}
+
+/* Switch track */
+.switch {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.slider {
+  position: absolute;
+  inset: 0;
+  background: #cbd2da;
+  border-radius: 20px;
+  transition: background 0.2s;
+}
+
+.slider::before {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  left: 3px;
+  top: 3px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.2s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.switch input:checked + .slider {
+  background: #3b82f6;
+}
+
+.switch input:checked + .slider::before {
+  transform: translateX(16px);
+}
+
+.switch input:focus-visible + .slider {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.btn-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  opacity: 0.9;
+}
+
+/* ── Reset button ────────────────────────────────────────────── */
+#reset {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: auto;
+  background: #0d1b2a;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+#reset:hover {
+  background: #1e3a5f;
+}
+
+#reset:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* ── Legend ──────────────────────────────────────────────────── */
+.map-overlay {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: #fff;
+  margin: 0 16px 40px 0;
+  border-radius: 8px;
+  border: 1px solid #e2e6ea;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-size: 0.82rem;
+  overflow: auto;
+}
+
+#legend {
+  padding: 12px 14px;
+  line-height: 22px;
+  min-width: 160px;
+}
+
+.legend-key {
+  display: inline-block;
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  margin-right: 7px;
+  vertical-align: middle;
+}
+
+/* ── Responsive ──────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  #container {
+    flex-direction: column;
+  }
+
+  #sidebar {
+    width: 100% !important;
+    height: auto;
+    max-height: 40vh;
+    border-right: none;
+    border-bottom: 1px solid #e2e6ea;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 12px;
+  }
+
+  #sidebar-header {
+    width: 100%;
+  }
+
+  #info-panel {
+    flex: 1 1 180px;
+    min-height: unset;
+  }
+
+  #controls {
+    flex: 1 1 140px;
+  }
+
+  #reset {
+    width: auto;
+    align-self: flex-end;
+    margin-top: 0;
+  }
+
+  #map {
+    flex: 1;
+    min-height: 60vh;
+  }
+}

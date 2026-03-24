@@ -22,19 +22,19 @@ map.addControl(
 map.on("load", () => {
   map.addSource("borough-boundaries", {
     type: "geojson",
-    data: "./data/borough-boundaries.geojson",
+    data: "/data/borough-boundaries.geojson",
     promoteId: "boro_code",
   });
 
   map.addSource("Parks_Properties", {
     type: "geojson",
-    data: "./data/Parks_Properties.geojson",
+    data: "/data/Parks_Properties.geojson",
     promoteId: "omppropid",
   });
 
   map.addSource("basketball-courts", {
     type: "geojson",
-    data: "./data/basketball-court.geojson",
+    data: "/data/basketball-court.geojson",
   });
 
   map.addLayer(
@@ -182,7 +182,11 @@ function toggleLayer(checked, ...layerIds) {
 document
   .querySelector("#toggle-boroughs")
   .addEventListener("change", function () {
-    toggleLayer(this.checked, "borough-boundaries-fill", "borough-boundaries-line");
+    toggleLayer(
+      this.checked,
+      "borough-boundaries-fill",
+      "borough-boundaries-line",
+    );
   });
 
 document

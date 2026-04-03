@@ -4,6 +4,15 @@ mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_API_TOKEN;
 const INIT_CENTER = [-73.97, 40.68];
 const INIT_ZOOM = 11;
 
+let courtsByPropId = {};
+fetch("/data/basketball-court.geojson")
+  .then((r) => r.json())
+  .then((data) => {
+    data.features.forEach((f) => {
+      courtsByPropId[f.properties.Prop_ID] = f.properties;
+    });
+  });
+
 const map = new mapboxgl.Map({
   container: "map",
   center: INIT_CENTER,
@@ -131,12 +140,15 @@ map.on("click", (e) => {
     layers: ["nyc-parks"],
   });
   if (selectedPark.length !== 0) {
-    const { name311, typecategory, subcategory, location } =
+    const { name311, typecategory, subcategory, location, omppropid } =
       selectedPark[0].properties;
+    const court = courtsByPropId[omppropid];
     document.getElementById("pd").innerHTML = `
       <h3>${name311}</h3>
-      <p><em><strong>Type:</strong> ${typecategory} <strong>Subcategory:</strong> ${subcategory}</em></p>
+      <hr />
       <p><strong>Location:</strong> ${location}</p>
+      <p><strong>Facilities:</strong></p>
+      ${court ? `<p>Basketball Court</p>` : ""}
     `;
     document.getElementById("pd").style.color = "green";
   }

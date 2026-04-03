@@ -14,3 +14,4 @@ Find a park.
 - Schoolyard to Playgrounds: https://data.cityofnewyork.us/dataset/Schoolyard-to-Playgrounds/dbmp-698d
 - Public Restrooms: https://data.cityofnewyork.us/City-Government/Public-Restrooms-Operational-/vzrx-zg6z
 - NYC Parks Drinking Fountains, Map: https://data.cityofnewyork.us/Recreation/NYC-Parks-Drinking-Fountains-Map/622h-mkfu
+- Borough boundaries: https://www.nyc.gov/content/planning/pages/resources/datasets/borough-boundaries

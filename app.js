@@ -46,6 +46,11 @@ map.on("load", () => {
     data: "/data/basketball-court.geojson",
   });
 
+  map.addSource("restrooms", {
+    type: "geojson",
+    data: "/data/restrooms.geojson",
+  });
+
   map.addLayer(
     {
       id: "basketball-courts",
@@ -53,6 +58,27 @@ map.on("load", () => {
       source: "basketball-courts",
       paint: {
         "circle-color": "orange",
+        "circle-radius": {
+          base: 3,
+          stops: [
+            [12, 4],
+            [22, 180],
+          ],
+        },
+        "circle-opacity": 0.7,
+      },
+      layout: { visibility: "none" },
+    },
+    "road-label-simple",
+  );
+
+  map.addLayer(
+    {
+      id: "restrooms",
+      type: "circle",
+      source: "restrooms",
+      paint: {
+        "circle-color": "#e63946",
         "circle-radius": {
           base: 3,
           stops: [
@@ -140,8 +166,7 @@ map.on("click", (e) => {
     layers: ["nyc-parks"],
   });
   if (selectedPark.length !== 0) {
-    const { name311, typecategory, subcategory, location, omppropid } =
-      selectedPark[0].properties;
+    const { name311, location, omppropid } = selectedPark[0].properties;
     const court = courtsByPropId[omppropid];
     document.getElementById("pd").innerHTML = `
       <h3>${name311}</h3>
@@ -207,9 +232,15 @@ document
     toggleLayer(this.checked, "basketball-courts");
   });
 
+document
+  .querySelector("#toggle-restrooms")
+  .addEventListener("change", function () {
+    toggleLayer(this.checked, "restrooms");
+  });
+
 // ---------- Legend ---------- //
-const layers = ["Public Parks", "Basketball Courts"];
-const colors = ["#00b5c9", "orange"];
+const layers = ["Public Parks", "Basketball Courts", "Restrooms"];
+const colors = ["#00b5c9", "orange", "#e63946"];
 const legend = document.getElementById("legend");
 
 layers.forEach((layer, i) => {

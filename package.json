@@ -5,9 +5,11 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "process-data": "node scripts/slim_restrooms.js"
+    "process-data": "node scripts/slim_restrooms.js",
+    "join-data": "node scripts/join_restrooms_to_parks.js"
   },
   "devDependencies": {
+    "@turf/boolean-point-in-polygon": "^7.3.4",
     "vite": "^5.0.0"
   },
   "type": "module"

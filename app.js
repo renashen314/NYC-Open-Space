@@ -4,14 +4,14 @@ mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_API_TOKEN;
 const INIT_CENTER = [-73.97, 40.68];
 const INIT_ZOOM = 11;
 
-let courtsByPropId = {};
-fetch("/data/basketball-court.geojson")
-  .then((r) => r.json())
-  .then((data) => {
-    data.features.forEach((f) => {
-      courtsByPropId[f.properties.Prop_ID] = f.properties;
-    });
-  });
+const datasetCache = {};
+
+async function getDataset(name, url, indexBy) {
+  if (datasetCache[name]) return datasetCache[name];
+  const data = await fetch(url).then((r) => r.json());
+  datasetCache[name] = indexBy(data);
+  return datasetCache[name];
+}
 
 const map = new mapboxgl.Map({
   container: "map",
@@ -161,19 +161,42 @@ map.on("load", () => {
 });
 
 // ---------- Click handlers ---------- //
-map.on("click", (e) => {
+map.on("click", async (e) => {
   const selectedPark = map.queryRenderedFeatures(e.point, {
     layers: ["nyc-parks"],
   });
   if (selectedPark.length !== 0) {
     const { name311, location, omppropid } = selectedPark[0].properties;
-    const court = courtsByPropId[omppropid];
+
+    const [basketballCourts, restroomsByPark] = await Promise.all([
+      getDataset("courts", "/data/basketball-court.geojson", (data) =>
+        Object.fromEntries(
+          data.features.map((f) => [f.properties.Prop_ID, f.properties]),
+        ),
+      ),
+      getDataset("restrooms", "/data/restrooms-by-park.json", (data) => data),
+    ]);
+
+    const court = basketballCourts[omppropid];
+    const restrooms = restroomsByPark[omppropid];
+
     document.getElementById("pd").innerHTML = `
       <h3>${name311}</h3>
       <hr />
       <p><strong>Location:</strong> ${location}</p>
       <p><strong>Facilities:</strong></p>
       ${court ? `<p>Basketball Court</p>` : ""}
+      ${
+        restrooms
+          ? restrooms
+              .map(
+                (r) => `
+        <p>Restroom${r.accessibility ? ` (${r.accessibility})` : ""} &mdash; ${r.open}, ${r.hours_of_operation ?? "hours vary"}</p>
+      `,
+              )
+              .join("")
+          : ""
+      }
     `;
     document.getElementById("pd").style.color = "green";
   }

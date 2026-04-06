@@ -20,21 +20,14 @@ const map = new mapboxgl.Map({
   style: "mapbox://styles/renashen314/cluefsed800gz01ql7gbs4lef/draft",
 });
 
-map.addControl(
-  new MapboxGeocoder({
-    accessToken: mapboxgl.accessToken,
-    mapboxgl: mapboxgl,
-  }),
-);
+const geocoder = new MapboxGeocoder({
+  accessToken: mapboxgl.accessToken,
+  mapboxgl: mapboxgl,
+});
+document.getElementById("geocoder-container").appendChild(geocoder.onAdd(map));
 
 // ---------- Sources & layers ---------- //
 map.on("load", () => {
-  map.addSource("borough-boundaries", {
-    type: "geojson",
-    data: "/data/borough-boundaries.geojson",
-    promoteId: "boro_code",
-  });
-
   map.addSource("Parks_Properties", {
     type: "geojson",
     data: "/data/Parks_Properties.geojson",
@@ -49,6 +42,11 @@ map.on("load", () => {
   map.addSource("restrooms", {
     type: "geojson",
     data: "/data/restrooms.geojson",
+  });
+
+  map.addSource("schoolyards", {
+    type: "geojson",
+    data: "/data/schoolyards.geojson",
   });
 
   map.addLayer(
@@ -95,6 +93,20 @@ map.on("load", () => {
 
   map.addLayer(
     {
+      id: "schoolyards",
+      type: "fill",
+      source: "schoolyards",
+      paint: {
+        "fill-color": "#f5c400",
+        "fill-opacity": 0.4,
+      },
+      layout: { visibility: "visible" },
+    },
+    "road-label-simple",
+  );
+
+  map.addLayer(
+    {
       id: "nyc-parks",
       type: "fill",
       source: "Parks_Properties",
@@ -112,52 +124,6 @@ map.on("load", () => {
     "road-label-simple",
   );
 
-  map.addLayer(
-    {
-      id: "borough-boundaries-fill",
-      type: "fill",
-      source: "borough-boundaries",
-      paint: {
-        "fill-opacity": [
-          "case",
-          ["boolean", ["feature-state", "hover"], false],
-          0.5,
-          0.2,
-        ],
-        "fill-color": [
-          "match",
-          ["get", "boro_code"],
-          "1",
-          "green",
-          "2",
-          "purple",
-          "3",
-          "orange",
-          "4",
-          "yellow",
-          "5",
-          "pink",
-          "steelblue",
-        ],
-      },
-      layout: { visibility: "none" },
-    },
-    "road-label-simple",
-  );
-
-  map.addLayer(
-    {
-      id: "borough-boundaries-line",
-      type: "line",
-      source: "borough-boundaries",
-      paint: {
-        "line-color": "black",
-        "line-width": 1,
-      },
-      layout: { visibility: "none" },
-    },
-    "road-label-simple",
-  );
 });
 
 // ---------- Click handlers ---------- //
@@ -240,16 +206,6 @@ function toggleLayer(checked, ...layerIds) {
 }
 
 document
-  .querySelector("#toggle-boroughs")
-  .addEventListener("change", function () {
-    toggleLayer(
-      this.checked,
-      "borough-boundaries-fill",
-      "borough-boundaries-line",
-    );
-  });
-
-document
   .querySelector("#toggle-basketball")
   .addEventListener("change", function () {
     toggleLayer(this.checked, "basketball-courts");
@@ -261,9 +217,10 @@ document
     toggleLayer(this.checked, "restrooms");
   });
 
+
 // ---------- Legend ---------- //
-const layers = ["Public Parks", "Basketball Courts", "Restrooms"];
-const colors = ["#00b5c9", "orange", "#e63946"];
+const layers = ["Public Parks", "Schoolyard Playgrounds", "Basketball Courts", "Restrooms"];
+const colors = ["#00b5c9", "#f5c400", "orange", "#e63946"];
 const legend = document.getElementById("legend");
 
 layers.forEach((layer, i) => {
